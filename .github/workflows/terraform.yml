@@ -2,8 +2,9 @@
 name: "Cleanup via TF Destroy"
 
 on:
+  push:
+    branches: [ "main" ]
   pull_request:
-    types: [closed] 
 
 
 env:
