@@ -12,10 +12,6 @@ env:
   ARM_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
   ROOT_PATH: '${{github.workspace}}/AzTerraformGIT'
 
-defaults:
-  run:
-    working-directory: ${{env.ROOT_PATH}}
-
 jobs:
   terraform_destroy:
     name: 'Terraform Destroy'
