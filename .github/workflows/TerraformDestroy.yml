@@ -18,8 +18,13 @@ defaults:
 
 jobs:
   terraform_destroy:
-    - name: 'Terraform Destroy'
-      runs-on: ubuntu
+    name: 'Terraform Destroy'
+    runs-on: ubuntu-latest
+    
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
 
 	  steps:
       - uses: actions/checkout@v2
