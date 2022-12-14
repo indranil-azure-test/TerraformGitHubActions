@@ -18,8 +18,8 @@ defaults:
 
 jobs:
   terraform_destroy:
-    name: 'Terraform Destroy'
-    runs-on: ubuntu-latest
+    - name: 'Terraform Destroy'
+      runs-on: ubuntu-latest
 
 	  steps:
       - uses: actions/checkout@v2
