@@ -1,7 +1,7 @@
 name: "Terraform Destroy"
 
 on:
-  pull:
+  push:
     branches: [ "main" ]
   pull_request:
 
@@ -29,6 +29,6 @@ jobs:
       - name: Terraform Init
         run: terraform init
        
-      - name: Terraform Destroy
+      - name: "Terraform Destroy"
         run: terraform destroy --auto-approve
 		    working-directory: ${{env.ROOT_PATH}}
