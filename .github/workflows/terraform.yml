@@ -28,6 +28,4 @@ jobs:
 
       - name: terraform destroy
         uses: dflook/terraform-destroy@v1
-        with:
-          path: '${{github.workspace}}/AzTerraformGIT'
-          workspace: ${{ github.head_ref }}
+        working-directory: ${{env.ROOT_PATH}}
