@@ -1,4 +1,4 @@
-name: 'Destroy from Azure by Terraform'
+name: 'Deploy to Azure by Terraform'
 
 on:
   push:
@@ -50,10 +50,9 @@ jobs:
       run: terraform plan
       working-directory: ${{env.ROOT_PATH}}
 
-  terraform_destroy:
-    name: 'Terraform Destroy'
+  terraform_apply:
+    name: 'Terraform Apply'
     runs-on: ubuntu-latest
-    uses: dflook/terraform-destroy@v1
     needs: [terraform_plan]
     environment: production
 
@@ -83,6 +82,6 @@ jobs:
     # run: terraform fmt -check
 
     # Generates an execution plan for Terraform
-    - name: Terraform Destroy
-      run: terraform destroy --auto-approve
+    - name: Terraform Apply
+      run: terraform apply --auto-approve
       working-directory: ${{env.ROOT_PATH}}
