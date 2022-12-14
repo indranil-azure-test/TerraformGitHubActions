@@ -17,7 +17,8 @@ defaults:
     working-directory: ${{env.ROOT_PATH}}
 
 jobs:
-  terraform:
+  terraform_destroy:
+    name: 'Terraform Destroy'
     runs-on: ubuntu-latest
 
 	  steps:
@@ -29,6 +30,6 @@ jobs:
       - name: Terraform Init
         run: terraform init
        
-      - name: "Terraform Destroy"
+      - name: Terraform Destroy
         run: terraform destroy --auto-approve
 		    working-directory: ${{env.ROOT_PATH}}
