@@ -30,8 +30,7 @@ jobs:
         uses: dflook/terraform-destroy@v1
         with:
           path: '${{github.workspace}}/AzTerraformGIT'
-          workspace: ${{ github.head_ref }}
-
+          
       - name: Terraform Apply
         run: terraform apply --auto-approve
         working-directory: ${{env.ROOT_PATH}}
