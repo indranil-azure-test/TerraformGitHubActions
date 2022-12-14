@@ -1,6 +1,9 @@
-name: Terraform Destroy
+name: "Terraform Destroy"
 
-on: [workflow_dispatch]
+on:
+  pull:
+    branches: [ "main" ]
+  pull_request:
 
 defaults:
   run:
