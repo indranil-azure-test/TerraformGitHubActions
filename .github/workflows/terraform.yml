@@ -1,11 +1,9 @@
-
-name: "Cleanup via TF Destroy"
+name: 'Deploy to Azure by Terraform'
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
-
 
 env:
   ARM_CLIENT_ID: ${{secrets.AZURE_CLIENT_ID}}
@@ -17,20 +15,73 @@ env:
 permissions:
   contents: read
 
-
 jobs:
-  destroy_workspace:
+  terraform_plan:
+    name: 'Terraform Plan'
     runs-on: ubuntu-latest
-    name: Destroy terraform workspace
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
 
-      - name: terraform destroy
-        uses: dflook/terraform-destroy@v1
-        with:
-          path: '${{github.workspace}}/AzTerraformGIT'
-          
-      - name: Terraform Destroy
-        run: terraform destroy --auto-approve
-        working-directory: ${{env.ROOT_PATH}}
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ${{env.ROOT_PATH}}
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    #- name: Terraform Format
+    # run: terraform fmt -check
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: terraform plan
+      working-directory: ${{env.ROOT_PATH}}
+
+  terraform_apply:
+    name: 'Terraform Apply'
+    runs-on: ubuntu-latest
+    needs: [terraform_plan]
+    environment: production
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ${{env.ROOT_PATH}}
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    #- name: Terraform Format
+    # run: terraform fmt -check
+
+    # Generates an execution plan for Terraform
+    - name: Terraform Apply
+      run: terraform apply --auto-approve
+      working-directory: ${{env.ROOT_PATH}}
